@@ -1,156 +1,104 @@
 <script>
-    import { PUBLIC_BASE_URL } from '$env/static/public';
- 	import axios from "axios";
-
-	let bfs_number_names = [
-		{id: 261, name: `Zürich` },
-		{id: 62, name: `Kloten` },
-		{id: 198, name: `Uster` },
-		{id: 296, name: `Illnau-Effretikon` },
-		{id: 27, name: `Feuerthalen` },
-		{id: 177, name: `Pfäffikon` },
-		{id: 11, name: `Ottenbach` },
-		{id: 191, name: `Dübendorf` },
-		{id: 138, name: `Richterswil` },
-		{id: 195, name: `Maur` },
-		{id: 56, name: `Embrach` },
-		{id: 53, name: `Bülach` },
-		{id: 230, name: `Winterthur` },
-		{id: 157, name: `Oetwil am See` },
-		{id: 178, name: `Russikon` },
-		{id: 10, name: `Obfelden` },
-		{id: 120, name: `Wald (ZH)` },
-		{id: 91, name: `Niederweningen` },
-		{id: 84, name: `Dällikon` },
-		{id: 83, name: `Buchs (ZH)` },
-		{id: 118, name: `Rüti (ZH)` },
-		{id: 173, name: `Hittnau` },
-		{id: 52, name: `Bassersdorf` },
-		{id: 58, name: `Glattfelden` },
-		{id: 66, name: `Opfikon` },
-		{id: 117, name: `Hinwil` },
-		{id: 95, name: `Regensberg` },
-		{id: 136, name: `Langnau am Albis` },
-		{id: 243, name: `Dietikon` },
-		{id: 151, name: `Erlenbach (ZH)` },
-		{id: 6, name: `Kappel am Albis` },
-		{id: 158, name: `Stäfa` },
-		{id: 231, name: `Zell (ZH)` },
-		{id: 228, name: `Turbenthal` },
-		{id: 92, name: `Oberglatt` },
-		{id: 72, name: `Winkel` },
-		{id: 199, name: `Volketswil` },
-		{id: 135, name: `Kilchberg (ZH)` },
-		{id: 121, name: `Wetzikon (ZH)` },
-		{id: 160, name: `Zumikon` },
-		{id: 180, name: `Weisslingen` },
-		{id: 219, name: `Elsau` },
-		{id: 221, name: `Hettlingen` },
-		{id: 139, name: `Rüschlikon` },
-		{id: 13, name: `Stallikon` },
-		{id: 86, name: `Dielsdorf` },
-		{id: 69, name: `Wallisellen` },
-		{id: 54, name: `Dietlikon` },
-		{id: 156, name: `Meilen` },
-		{id: 200, name: `Wangen-Brüttisellen` },
-		{id: 28, name: `Flaach` },
-		{id: 96, name: `Regensdorf` },
-		{id: 90, name: `Niederhasli` },
-		{id: 297, name: `Bauma` },
-		{id: 241, name: `Aesch (ZH)` },
-		{id: 247, name: `Schlieren` },
-		{id: 113, name: `Dürnten` },
-		{id: 249, name: `Unterengstringen` },
-		{id: 115, name: `Gossau (ZH)` },
-		{id: 245, name: `Oberengstringen` },
-		{id: 98, name: `Schleinikon` },
-		{id: 1, name: `Aeugst am Albis` },
-		{id: 38, name: `Rheinau` },
-		{id: 60, name: `Höri` },
-		{id: 225, name: `Rickenbach (ZH)` },
-		{id: 67, name: `Rafz` },
-		{id: 131, name: `Adliswil` },
-		{id: 161, name: `Zollikon` },
-		{id: 250, name: `Urdorf` },
-		{id: 153, name: `Hombrechtikon` },
-		{id: 242, name: `Birmensdorf (ZH)` },
-		{id: 172, name: `Fehraltorf` },
-		{id: 102, name: `Weiach` },
-		{id: 155, name: `Männedorf` },
-		{id: 154, name: `Küsnacht (ZH)` },
-		{id: 4, name: `Hausen am Albis` },
-		{id: 59, name: `Hochfelden` },
-		{id: 193, name: `Fällanden` },
-		{id: 194, name: `Greifensee` },
-		{id: 196, name: `Mönchaltorf` },
-		{id: 214, name: `Dägerlen` },
-		{id: 39, name: `Thalheim an der Thur` },
-		{id: 159, name: `Uetikon am See` },
-		{id: 227, name: `Seuzach` },
-		{id: 248, name: `Uitikon` },
-		{id: 2, name: `Affoltern am Albis` },
-		{id: 244, name: `Geroldswil` },
-		{id: 89, name: `Niederglatt` },
-		{id: 141, name: `Thalwil` },
-		{id: 68, name: `Rorbas` },
-		{id: 224, name: `Pfungen` },
-		{id: 251, name: `Weiningen (ZH)` },
-		{id: 112, name: `Bubikon` },
-		{id: 223, name: `Neftenbach` },
-		{id: 9, name: `Mettmenstetten` },
-		{id: 94, name: `Otelfingen` },
-		{id: 29, name: `Flurlingen` },
-		{id: 100, name: `Stadel` },
-		{id: 116, name: `Grüningen` },
-		{id: 31, name: `Henggart` },
-		{id: 25, name: `Dachsen` },
-		{id: 3, name: `Bonstetten` },
-		{id: 51, name: `Bachenbülach` },
-		{id: 295, name: `Horgen` }
-	];
-
-	let rooms;
-	let area;
-	let price = '...'
-	let selected;
-	function handleSubmit() {
-		let url =
-            PUBLIC_BASE_URL +
-            "/api/predict/?bfs_number=" +
-            selected.id +
-            "&area=" +
-            area +
-            "&rooms=" +
-            rooms;
-        console.log(url);
-        axios.get(url).then((response) => {
-            price = 'CHF ' + response.data;
-        });
+	import { onMount } from 'svelte';
+	import axios from 'axios';
+	let age = '';
+	let bmi = '';
+	let avg_glucose_level = '';
+	let hypertension = '';
+	let heart_disease = '';
+	let ever_married = '';
+	let prediction = null;
+	let probability = null;
+	let error = null;
+  
+	const submitForm = async () => {
+	  try {
+		const response = await axios.get('http://localhost:5000/api/predict/', {
+		  params: {
+			age: age,
+			bmi: bmi,
+			avg_glucose_level: avg_glucose_level,
+			hypertension: hypertension,
+			heart_disease: heart_disease,
+			ever_married: ever_married,
+		  }
+		});
+		prediction = response.data.prediction;
+		probability = response.data.probability;
+		error = null;
+	  } catch (err) {
+		error = 'Fehler bei der Vorhersage';
+		console.error(err);
+	  }
+	};
+  </script>
+  
+  <main>
+	<h1>Schlaganfall Vorhersage</h1>
+	<form on:submit|preventDefault={submitForm}>
+	  <div>
+		<label for="age">Alter:</label>
+		<input type="number" id="age" bind:value={age} required />
+	  </div>
+	  <div>
+		<label for ="bmi">BMI:</label>
+		<input type="number" step="0.1" id="bmi" bind:value={bmi} required />
+	  </div>
+	  <div>
+		<label for="avg_glucose_level">Durchschnittlicher Glukosespiegel:</label>
+		<input type="number" step="0.1" id="avg_glucose_level" bind:value={avg_glucose_level} required />
+	  </div>
+	  <div>
+		<label for="hypertension">Bluthochdruck (0 oder 1):</label>
+		<input type="number" id="hypertension" bind:value={hypertension} required />
+	  </div>
+	  <div>
+		<label for="heart_disease">Herzkrankheit (0 oder 1):</label>
+		<input type="number" id="heart_disease" bind:value={heart_disease} required />
+	  </div>
+	  <div>
+		<label for="ever_married">Verheiratet (0 oder 1):</label>
+		<input type="number" id="ever_married" bind:value={ever_married} required />
+	  </div>
+	  <button type="submit">Vorhersage machen</button>
+	</form>
+  
+	{#if error}
+	  <p style="color: red;">{error}</p>
+	{/if}
+  
+	{#if prediction !== null}
+	  <h2>Vorhersage Ergebnis</h2>
+	  <p>Vorhersage: {prediction === 1 ? 'Schlaganfall' : 'Kein Schlaganfall'}</p>
+	  <p>Wahrscheinlichkeiten:</p>
+	  <ul>
+		<li>Kein Schlaganfall: {probability[0]}</li>
+		<li>Schlaganfall: {probability[1]}</li>
+	  </ul>
+	{/if}
+  </main>
+  
+  <style>
+	main {
+	  text-align: center;
+	  padding: 1em;
+	  margin: 0 auto;
+	  max-width: 600px;
 	}
-</script>
-<div class="container text-center">
-
-	<h1>Are you paying to much? Our model predicts that you should be paying {price}</h1>
-
-	<div class="row justify-content-md-center">
-	  <div class="col col-lg-2">
-		<input type="number" class="form-control" placeholder="area" aria-label="area" bind:value={area}>
-	  </div>
-	  <div class="col col-lg-2">
-		<input type="number" class="form-control" placeholder="rooms" aria-label="rooms" bind:value={rooms}>
-	  </div>
-	  <div class="col col-lg-2">
-
-		<select class="form-select" bind:value={selected}>
-			{#each bfs_number_names as bfs}
-				<option value={bfs}>
-					{bfs.name}
-				</option>
-			{/each}
-		</select>
-	  </div>
-	  <div class="col-md-auto">
-		<button type="button" class="btn btn-primary" on:click={handleSubmit}>price estimation</button>
-	  </div>
-	</div>
-  </div>
+	form {
+	  display: grid;
+	  gap: 0.5em;
+	}
+	div {
+	  display: flex;
+	  flex-direction: column;
+	}
+	label {
+	  font-weight: bold;
+	}
+	button {
+	  padding: 0.5em;
+	  font-size: 1em;
+	}
+  </style>
+  
