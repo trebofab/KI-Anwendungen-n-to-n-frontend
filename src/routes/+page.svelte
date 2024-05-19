@@ -1,2 +1,2 @@
-<h1>Welcome to the demo project</h1>
-<p>This demo shows use cases of simple "KI-Anwendungen".</p>
+<h1>Willkommen zum Projekt "Prognose für Schlaganfall"</h1>
+<p>18. Mai 2024, Fabienne Trebo</p>
