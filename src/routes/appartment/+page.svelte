@@ -1,116 +1,132 @@
 <script>
-    import { onMount } from 'svelte';
-    import { PUBLIC_BASE_URL } from "$env/static/public";
-    import axios from 'axios';
-    let age = '';
-    let bmi = '';
-    let avg_glucose_level = '';
-    let work_type = '';
-    let smoking_status = '';
-    let prediction = null;
-    let probability = null;
-    let error = null;
+  import { onMount } from 'svelte';
+  import { PUBLIC_BASE_URL } from "$env/static/public";
+  import axios from 'axios';
+  let age = '';
+  let bmi = '';
+  let avg_glucose_level = '';
+  let work_type = '';
+  let smoking_status = '';
+  let prediction = null;
+  let probability = null;
+  let error = null;
 
-    const submitForm = async () => {
-        try {
-            const response = await axios.get(`${PUBLIC_BASE_URL}/api/predict/`, {
-                params: {
-                    age: age,
-                    bmi: bmi,
-                    avg_glucose_level: avg_glucose_level,
-                    work_type_Govt_job: work_type === 'Govt_job' ? 1 : 0,
-                    work_type_Never_worked: work_type === 'Never_worked' ? 1 : 0,
-                    work_type_Private: work_type === 'Private' ? 1 : 0,
-                    work_type_Self_employed: work_type === 'Self_employed' ? 1 : 0,
-                    work_type_children: work_type === 'children' ? 1 : 0,
-                    smoking_status_formerly_smoked: smoking_status === 'formerly smoked' ? 1 : 0,
-                    smoking_status_never_smoked: smoking_status === 'never smoked' ? 1 : 0,
-                    smoking_status_smokes: smoking_status === 'smokes' ? 1 : 0
-                }
-            });
-            prediction = response.data.prediction;
-            probability = response.data.probability;
-            error = null;
-        } catch (err) {
-            error = 'Fehler bei der Vorhersage';
-            console.error(err);
-        }
-    };
+  const submitForm = async () => {
+      try {
+          const apiUrl = `${PUBLIC_BASE_URL}/api/predict/`;
+          console.log("API URL:", apiUrl); // Debug-Ausgabe der API-URL
+          console.log("Parameters:", {
+              age: age,
+              bmi: bmi,
+              avg_glucose_level: avg_glucose_level,
+              work_type_Govt_job: work_type === 'Govt_job' ? 1 : 0,
+              work_type_Never_worked: work_type === 'Never_worked' ? 1 : 0,
+              work_type_Private: work_type === 'Private' ? 1 : 0,
+              work_type_Self_employed: work_type === 'Self_employed' ? 1 : 0,
+              work_type_children: work_type === 'children' ? 1 : 0,
+              smoking_status_formerly_smoked: smoking_status === 'formerly smoked' ? 1 : 0,
+              smoking_status_never_smoked: smoking_status === 'never smoked' ? 1 : 0,
+              smoking_status_smokes: smoking_status === 'smokes' ? 1 : 0
+          }); // Debug-Ausgabe der Parameter
+
+          const response = await axios.get(apiUrl, {
+              params: {
+                  age: age,
+                  bmi: bmi,
+                  avg_glucose_level: avg_glucose_level,
+                  work_type_Govt_job: work_type === 'Govt_job' ? 1 : 0,
+                  work_type_Never_worked: work_type === 'Never_worked' ? 1 : 0,
+                  work_type_Private: work_type === 'Private' ? 1 : 0,
+                  work_type_Self_employed: work_type === 'Self_employed' ? 1 : 0,
+                  work_type_children: work_type === 'children' ? 1 : 0,
+                  smoking_status_formerly_smoked: smoking_status === 'formerly smoked' ? 1 : 0,
+                  smoking_status_never_smoked: smoking_status === 'never smoked' ? 1 : 0,
+                  smoking_status_smokes: smoking_status === 'smokes' ? 1 : 0
+              }
+          });
+          prediction = response.data.prediction;
+          probability = response.data.probability;
+          error = null;
+      } catch (err) {
+          error = 'Fehler bei der Vorhersage';
+          console.error("Error:", err); // Ausgeben des Fehlers in der Konsole
+      }
+  };
 </script>
 
 <main>
-    <div class="container">
-        <div class="image-container">
-            <img src="/image.png" alt="Futuristic Healthcare Setting" />
-        </div>
-        <div class="form-container">
-            <h1>Schlaganfall Vorhersage</h1>
-            <form on:submit|preventDefault={submitForm}>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="age">Alter in Jahren</label>
-                        <input type="number" id="age" bind:value={age} required />
-                    </div>
-                    <div class="input-group">
-                        <label for="bmi">BMI</label>
-                        <input type="number" step="0.1" id="bmi" bind:value={bmi} required />
-                    </div>
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="avg_glucose_level">⌀-Glukosespiegel</label>
-                        <input type="number" step="0.1" id="avg_glucose_level" bind:value={avg_glucose_level} required />
-                    </div>
-                    <div class="input-group">
-                        <label for="work_type">Arbeitstyp</label>
-                        <select id="work_type" bind:value={work_type} required>
-                            <option value="">Bitte auswählen</option>
-                            <option value="Govt_job">Öffentlicher Dienst</option>
-                            <option value="Never_worked">Nie gearbeitet</option>
-                            <option value="Private">Privatwirtschaft</option>
-                            <option value="Self_employed">Selbstständig</option>
-                            <option value="children">Kinder</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="smoking_status">Raucherstatus</label>
-                        <div class="radio-group">
-                            <label>
-                                <input type="radio" bind:group={smoking_status} value="formerly smoked" />
-                                Ehemals geraucht
-                            </label>
-                            <label>
-                                <input type="radio" bind:group={smoking_status} value="never smoked" />
-                                Nie geraucht
-                            </label>
-                            <label>
-                                <input type="radio" bind:group={smoking_status} value="smokes" />
-                                Raucht
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <button type="submit">Vorhersage machen</button>
-            </form>
+  <div class="container">
+      <div class="image-container">
+          <img src="/image.png" alt="Futuristic Healthcare Setting" />
+      </div>
+      <div class="form-container">
+          <h1>Schlaganfall Vorhersage</h1>
+          <form on:submit|preventDefault={submitForm}>
+              <div class="input-row">
+                  <div class="input-group">
+                      <label for="age">Alter in Jahren</label>
+                      <input type="number" id="age" bind:value={age} required />
+                  </div>
+                  <div class="input-group">
+                      <label for="bmi">BMI</label>
+                      <input type="number" step="0.1" id="bmi" bind:value={bmi} required />
+                  </div>
+              </div>
+              <div class="input-row">
+                  <div class="input-group">
+                      <label for="avg_glucose_level">⌀-Glukosespiegel</label>
+                      <input type="number" step="0.1" id="avg_glucose_level" bind:value={avg_glucose_level} required />
+                  </div>
+                  <div class="input-group">
+                      <label for="work_type">Arbeitstyp</label>
+                      <select id="work_type" bind:value={work_type} required>
+                          <option value="">Bitte auswählen</option>
+                          <option value="Govt_job">Öffentlicher Dienst</option>
+                          <option value="Never_worked">Nie gearbeitet</option>
+                          <option value="Private">Privatwirtschaft</option>
+                          <option value="Self_employed">Selbstständig</option>
+                          <option value="children">Kinder</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="input-row">
+                  <div class="input-group">
+                      <label for="smoking_status">Raucherstatus</label>
+                      <div class="radio-group">
+                          <label>
+                              <input type="radio" bind:group={smoking_status} value="formerly smoked" />
+                              Ehemals geraucht
+                          </label>
+                          <label>
+                              <input type="radio" bind:group={smoking_status} value="never smoked" />
+                              Nie geraucht
+                          </label>
+                          <label>
+                              <input type="radio" bind:group={smoking_status} value="smokes" />
+                              Raucht
+                          </label>
+                      </div>
+                  </div>
+              </div>
+              <button type="submit">Vorhersage machen</button>
+          </form>
 
-            {#if error}
-                <p class="error-message">{error}</p>
-            {/if}
+          {#if error}
+              <p class="error-message">{error}</p>
+          {/if}
 
-            {#if prediction !== null}
-                <div class="result {prediction === 1 ? 'stroke' : 'no-stroke'}">
-                    <p>Besteht ein Risiko für einen Schlaganfall?</p>
-                    <p class="prediction">{prediction === 1 ? 'Ja' : 'Nein'}</p>
-                    <div class="probabilities">
-                        <p>Kein Schlaganfall: {Math.round(probability[0] * 100)} %</p>
-                        <p>Schlaganfall: {Math.round(probability[1] * 100)} %</p>
-                    </div>
-                </div>
-            {/if}
-        </div>
-    </div>
+          {#if prediction !== null}
+              <div class="result {prediction === 1 ? 'stroke' : 'no-stroke'}">
+                  <p>Besteht ein Risiko für einen Schlaganfall?</p>
+                  <p class="prediction">{prediction === 1 ? 'Ja' : 'Nein'}</p>
+                  <div class="probabilities">
+                      <p>Kein Schlaganfall: {Math.round(probability[0] * 100)} %</p>
+                      <p>Schlaganfall: {Math.round(probability[1] * 100)} %</p>
+                  </div>
+              </div>
+          {/if}
+      </div>
+  </div>
 </main>
 
 <style>
