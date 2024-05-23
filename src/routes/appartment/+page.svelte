@@ -1,8 +1,6 @@
 <script>
-  import { onMount } from "svelte";
+  import { PUBLIC_BASE_URL } from "$env/static/public";
   import axios from "axios";
-
-  const PUBLIC_BASE_URL = import.meta.env.VITE_PUBLIC_BASE_URL;
 
   let age = "";
   let bmi = "";
@@ -13,21 +11,46 @@
   let probability = null;
   let error = null;
 
-  const submitForm = async () => {
-    try {
-      let url = `${PUBLIC_BASE_URL}/api/predict?age=${age}&bmi=${bmi}&avg_glucose_level=${avg_glucose_level}&work_type_Govt_job=${work_type === "Govt_job" ? 1 : 0}&work_type_Never_worked=${work_type === "Never_worked" ? 1 : 0}&work_type_Private=${work_type === "Private" ? 1 : 0}&work_type_Self_employed=${work_type === "Self_employed" ? 1 : 0}&work_type_children=${work_type === "children" ? 1 : 0}&smoking_status_formerly_smoked=${smoking_status === "formerly smoked" ? 1 : 0}&smoking_status_never_smoked=${smoking_status === "never smoked" ? 1 : 0}&smoking_status_smokes=${smoking_status === "smokes" ? 1 : 0}`;
+  function handleSubmit() {
+    let url =
+      PUBLIC_BASE_URL +
+      "/api/predict?age=" +
+      age +
+      "&bmi=" +
+      bmi +
+      "&avg_glucose_level=" +
+      avg_glucose_level +
+      "&work_type_Govt_job=" +
+      (work_type === "Govt_job" ? 1 : 0) +
+      "&work_type_Never_worked=" +
+      (work_type === "Never_worked" ? 1 : 0) +
+      "&work_type_Private=" +
+      (work_type === "Private" ? 1 : 0) +
+      "&work_type_Self_employed=" +
+      (work_type === "Self_employed" ? 1 : 0) +
+      "&work_type_children=" +
+      (work_type === "children" ? 1 : 0) +
+      "&smoking_status_formerly_smoked=" +
+      (smoking_status === "formerly smoked" ? 1 : 0) +
+      "&smoking_status_never_smoked=" +
+      (smoking_status === "never smoked" ? 1 : 0) +
+      "&smoking_status_smokes=" +
+      (smoking_status === "smokes" ? 1 : 0);
 
-      console.log(url);
+    console.log(url);
 
-      const response = await axios.get(url);
-      prediction = response.data.prediction;
-      probability = response.data.probability;
-      error = null;
-    } catch (err) {
-      error = "Fehler bei der Vorhersage";
-      console.error(err);
-    }
-  };
+    axios
+      .get(url)
+      .then((response) => {
+        prediction = response.data.prediction;
+        probability = response.data.probability;
+        error = null;
+      })
+      .catch((err) => {
+        error = "Fehler bei der Vorhersage";
+        console.error(err);
+      });
+  }
 </script>
 
 <main>
@@ -37,7 +60,7 @@
     </div>
     <div class="form-container">
       <h1>Schlaganfall Vorhersage</h1>
-      <form on:submit|preventDefault={submitForm}>
+      <form on:submit|preventDefault={handleSubmit}>
         <div class="input-row">
           <div class="input-group">
             <label for="age">Alter in Jahren</label>
