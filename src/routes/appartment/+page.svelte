@@ -1,6 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import axios from "axios";
+  import { PUBLIC_BASE_URL } from '$env/static/public';
+	
 
   let age = "";
   let bmi = "";
@@ -13,7 +15,7 @@
 
   const submitForm = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/predict/", {
+      const response = await axios.get(`${PUBLIC_BASE_URL}/api/predict/", {
         params: {
           age: age,
           bmi: bmi,
