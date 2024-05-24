@@ -13,7 +13,6 @@
   let probability = null;
   let error = null;
 
-<<<<<<< HEAD
   
   const submitForm = async () => {
     try {
@@ -42,36 +41,6 @@
       console.error(err);
     }
   };
-=======
-	const submitForm = async () => {
-	  try {
-	    const response = await axios.get(`${PUBLIC_BASE_URL}/api/predict`, {
-	      params: {
-	        age: age,
-	        bmi: bmi,
-	        avg_glucose_level: avg_glucose_level,
-	        work_type_Govt_job: work_type === "Govt_job" ? 1 : 0,
-	        work_type_Never_worked: work_type === "Never_worked" ? 1 : 0,
-	        work_type_Private: work_type === "Private" ? 1 : 0,
-	        work_type_Self_employed: work_type === "Self_employed" ? 1 : 0,
-	        work_type_children: work_type === "children" ? 1 : 0,
-	        smoking_status_formerly_smoked:
-	          smoking_status === "formerly smoked" ? 1 : 0,
-	        smoking_status_never_smoked:
-	          smoking_status === "never smoked" ? 1 : 0,
-	        smoking_status_smokes: smoking_status === "smokes" ? 1 : 0,
-	      },
-	    });
-	    prediction = response.data.prediction;
-	    probability = response.data.probability;
-	    error = null;
-	  } catch (err) {
-	    error = "Fehler bei der Vorhersage";
-	    console.error(err);
-	  }
-	};
-
->>>>>>> f600eb52ed3af842f05faa1242dbed67713b33e3
 </script>
 
 <main>
