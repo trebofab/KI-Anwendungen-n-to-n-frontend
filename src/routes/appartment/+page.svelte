@@ -11,6 +11,7 @@
   let probability = null;
   let error = null;
 
+  
   const submitForm = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/predict/", {
